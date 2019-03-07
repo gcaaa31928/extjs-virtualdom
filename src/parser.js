@@ -63,7 +63,12 @@ function toAST(template) {
 			}
 		},
 		end: function(tag) {
-			parent = stack.pop();
+			stack.pop();
+			if (stack.length > 0) {
+				parent = stack[stack.length - 1];
+			} else {
+				parent = null;
+			}
 		},
 		chars: function(text) {
 			let element = new ASTText(text, parent);
@@ -71,4 +76,4 @@ function toAST(template) {
 	});
 	return root;
 };
-export { toAST, printASTTree }
+export { toAST, printASTTree, ASTElement, ASTText }
