@@ -16,16 +16,26 @@ function getVDomTagName(astNode) {
 	return tagName;
 }
 
+function createAttrsName(attrsMap) {
+	let evaluateStr = 'props: {';
+	if (attrsMap) {
+		Object.keys(attrsMap).every(attrName => {
+			let key = attrName;
+			if (attrName === 'class') {
+				key = 'className';
+			}
+			evaluateStr += key + ':' + JSON.stringify(attrsMap[attrName]) + ' ';
+		});
+	}
+	evaluateStr += '}';
+	return evaluateStr;
+}
+
 function createRenderElementEval(astNode) {
 	let str = 'h(' + JSON.stringify(astNode.tagName);
-	let attrs = astNode.attrsMap;
-	if (attrs) {
-		str += ',{';
-		Object.keys(attrs).every(attrName => {
-			str += attrName + '=' + Json.stringify(attrs[attrName]) + ' ';
-		});
-		str += '}';
-	}
+	str += ', {';
+	str += createAttrsName(astNode.attrsMap);
+	str += '}';
 	if (astNode.children) {
 		str += ',[';
 		astNode.children.forEach(child => {
