@@ -1,4 +1,5 @@
-import { ASTElement, ASTText } from './parser'
+import { ASTElement } from './parser/ast-element'
+import { ASTText } from './parser/ast-text'
 function getVDomTagName(astNode) {
 	let tagName = astNode.tagName;
 	let attrsMap = astNode.attrsMap;
@@ -16,18 +17,30 @@ function getVDomTagName(astNode) {
 	return tagName;
 }
 
-function createAttrsName(attrsMap) {
+function createPropsName(props) {
 	let evaluateStr = 'props: {';
-	if (attrsMap) {
-		Object.keys(attrsMap).every(attrName => {
-			let key = attrName;
-			if (attrName === 'class') {
-				key = 'className';
-			}
-			evaluateStr += key + ':' + JSON.stringify(attrsMap[attrName]) + ' ';
+	if (props) {
+		Object.keys(prop).every(props => {
+			let key = prop;
+			evaluateStr += key + ':' + JSON.stringify(props[prop]) + ' ';
 		});
 	}
-	evaluateStr += '}';
+	evaluateStr += '},';
+	return evaluateStr;
+}
+
+function createAttrsName(attrs) {
+	let evaluateStr = 'attrs: {';
+	if (attrs) {
+		Object.keys(attrs).every(attr => {
+			let key = attr;
+			if (attr === 'class') {
+				key = 'className';
+			}
+			evaluateStr += key + ':' + JSON.stringify(attrs[attr]) + ' ';
+		});
+	}
+	evaluateStr += '},';
 	return evaluateStr;
 }
 
@@ -35,6 +48,7 @@ function createRenderElementEval(astNode) {
 	let str = 'h(' + JSON.stringify(astNode.tagName);
 	str += ', {';
 	str += createAttrsName(astNode.attrsMap);
+	str += createPropsName(astNode.attrsMap);
 	str += '}';
 	if (astNode.children) {
 		str += ',[';
