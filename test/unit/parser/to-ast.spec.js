@@ -16,6 +16,10 @@ describe('to AST tree', () => {
 		expect(root.attrs).toEqual({ class: 'hello' });
 	});
 
-	it('create extjs-liked element with attributes', () => {
+	it('create tpl elements', () => {
+		let htmlString = `<tpl></tpl>`;
+		let root = toAST(htmlString);
+		expect(root.tagName).toBe('div');
+		expect(root.attrs).toEqual({ class: 'hello' });
 	});
 });

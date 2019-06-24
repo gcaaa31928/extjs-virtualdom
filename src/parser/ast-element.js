@@ -1,4 +1,5 @@
 import InMap from '../utils/in-map';
+import { parseIf } from './parse-tpl';
 const tagListForValue = ['input', 'textarea', 'option', 'select', 'progress'];
 
 let inValueTagMap = InMap('input,textarea,option,select,progress');
@@ -24,6 +25,8 @@ export class ASTElement {
 	constructor(tagName, attrs, parent) {
 		this.tagName = tagName;
 		this.children = [];
+		this.attrs = Object.create(null);
+		this.props = Object.create(null);
 		this.mapAttrs(attrs);
 		if (parent) {
 			parent.children.push(this);

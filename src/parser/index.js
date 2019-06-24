@@ -23,6 +23,15 @@ function printASTTree(node, level = 0) {
 	return str;
 }
 
+function parseIf(el) {
+	if (el.tagName === 'tpl' && el.attrs && 'if' in el.attrs) {
+		el.if = {
+			exp: el.attrs['if'],
+			block: el
+		};
+	}
+};
+
 function toAST(template) {
 	let root = null;
 	let stack = [];
@@ -30,6 +39,7 @@ function toAST(template) {
 	HTMLParser(template, {
 		start: function(tag, attrs, unary) {
 			let element = new ASTElement(tag, attrs, parent);
+			parseIf(element);
 			if (!root) {
 				root = element;
 			}
