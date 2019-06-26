@@ -29,6 +29,7 @@ function parseIf(el) {
 			exp: el.attrs['if'],
 			block: el
 		};
+		delete el.attrs['if'];
 	}
 };
 

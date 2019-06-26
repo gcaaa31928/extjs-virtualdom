@@ -16,10 +16,18 @@ describe('to AST tree', () => {
 		expect(root.attrs).toEqual({ class: 'hello' });
 	});
 
-	it('create tpl elements', () => {
-		let htmlString = `<tpl></tpl>`;
+	it('create dom element with style', () => {
+		let htmlString = `<div style="width: 0px"></div>`;
 		let root = toAST(htmlString);
 		expect(root.tagName).toBe('div');
-		expect(root.attrs).toEqual({ class: 'hello' });
+		expect(root.attrs).toEqual({ style: 'width: 0px' });
 	});
+
+	// it('create tpl if-like elements', () => {
+	// 	let htmlString = `<tpl if="true"><div>abc</div></tpl>`;
+	// 	let root = toAST(htmlString);
+	// 	console.log(root.innerHTML);
+	// 	expect(root.tagName).toBe('div');
+	// 	expect(root.attrs).toEqual({ class: 'hello' });
+	// });
 });

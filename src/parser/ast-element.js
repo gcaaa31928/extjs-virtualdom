@@ -1,5 +1,4 @@
 import InMap from '../utils/in-map';
-import { parseIf } from './parse-tpl';
 const tagListForValue = ['input', 'textarea', 'option', 'select', 'progress'];
 
 let inValueTagMap = InMap('input,textarea,option,select,progress');
@@ -15,6 +14,7 @@ let isBooleanAttr = InMap(
 function useProp(tag, type, attr) {
 	return (
 		(attr === 'value' && inValueTagMap(tag)) && tag !== 'button' ||
+		(attr === 'style') ||
 		(attr === 'selected' && tag === 'option') ||
 		(attr === 'checked' && tag === 'input') ||
 		(attr === 'muted' && tag === 'video')

@@ -20,7 +20,7 @@ function getVDomTagName(astNode) {
 function createPropsName(props) {
 	let evaluateStr = 'props: {';
 	if (props) {
-		Object.keys(prop).every(props => {
+		Object.keys(props).forEach(prop => {
 			let key = prop;
 			evaluateStr += key + ':' + JSON.stringify(props[prop]) + ' ';
 		});
@@ -32,12 +32,9 @@ function createPropsName(props) {
 function createAttrsName(attrs) {
 	let evaluateStr = 'attrs: {';
 	if (attrs) {
-		Object.keys(attrs).every(attr => {
+		Object.keys(attrs).forEach(attr => {
 			let key = attr;
-			if (attr === 'class') {
-				key = 'className';
-			}
-			evaluateStr += key + ':' + JSON.stringify(attrs[attr]) + ' ';
+			evaluateStr += key + ':' + JSON.stringify(attrs[attr]) + ',';
 		});
 	}
 	evaluateStr += '},';
@@ -46,17 +43,14 @@ function createAttrsName(attrs) {
 
 function createIfRenderElementEval(astNode) {
 	let cond = astNode.if;
-	return `${cond.exp} ?
-		${createRenderElementEval(astNode)} :
-		''
-	`;
+	return `(${cond.exp} ? ${createRenderElementEval(astNode)} : '')`;
 }
 
 function createRenderElementEval(astNode) {
 	let str = 'h(' + JSON.stringify(astNode.tagName);
 	str += ', {';
-	str += createAttrsName(astNode.attrsMap);
-	str += createPropsName(astNode.attrsMap);
+	str += createAttrsName(astNode.attrs);
+	str += createPropsName(astNode.props);
 	str += '}';
 	if (astNode.children) {
 		str += ',[';
@@ -86,13 +80,12 @@ function createRenderEval(astNode) {
 	return '';
 }
 
-function toRender(astRoot) {
+function genRenderCode(astRoot) {
 	let renderEval = '';
 	if (astRoot) {
 		renderEval += createRenderEval(astRoot);
 	}
-	console.log(renderEval);
-	return new Function('h', `with(this){return ${renderEval};}`);
+	return `with(this){return ${renderEval};}`;
 }
 
-export { toRender };
+export { genRenderCode };
