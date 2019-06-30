@@ -43,7 +43,12 @@ function createAttrsName(attrs) {
 
 function createIfRenderElementEval(astNode) {
 	let cond = astNode.if;
-	return `(${cond.exp} ? ${createRenderElementEval(astNode)} : '')`;
+	let children = astNode.children;
+	let evalArr = [];
+	for (let child of children) {
+		evalArr.push(`(${cond.exp} ? ${createRenderEval(child)} : null)`);
+	}
+	return evalArr.join(',');
 }
 
 function createRenderElementEval(astNode) {
@@ -64,7 +69,7 @@ function createRenderElementEval(astNode) {
 }
 
 function createRenderTextEval(astNode) {
-	return JSON.stringify(astNode.text);
+	return JSON.stringify(astNode.text.trim());
 }
 
 function createRenderEval(astNode) {

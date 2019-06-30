@@ -22,6 +22,32 @@ describe('basic html', () => {
 
 	it ('simple html with tpl if', () => {
 		assertPatch(`<div>parent<tpl if="false"><span>123</span></tpl></div>`, `<div>parent</div>`);
-		assertPatch(`<div>parent<tpl if="true"><span>123</span></tpl></div>`, `<div>parent</div>`);
+		assertPatch(`<div>parent<tpl if="true">123</tpl>456</div>`, `<div>parent123456</div>`);
+		assertPatch(`<div>parent<tpl if="false">123</tpl>456</div>`, `<div>parent456</div>`);
+		assertPatch(`<div>parent<tpl if="false"><span>child1</span></tpl><div>child2</div></div>`, `<div>parent<div>child2</div></div>`);
+		assertPatch(`
+			<div>
+				parent
+				<tpl if="true">
+					<span>child1</span>
+					<div>child2</div>
+				</tpl>
+				<div>
+					child3
+				</div>
+			</div>`,
+		`<div>parent<span>child1</span><div>child2</div><div>child3</div></div>`);
+		assertPatch(`
+			<div>
+				parent
+				<tpl if="false">
+					<span>child1</span>
+					<div>child2</div>
+				</tpl>
+				<div>
+					child3
+				</div>
+			</div>`,
+		`<div>parent<div>child3</div></div>`);
 	});
 });
